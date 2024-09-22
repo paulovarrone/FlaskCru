@@ -2,7 +2,6 @@ import mysql.connector
 from mysql.connector.errors import IntegrityError
 from flask import Flask, request, render_template
 
-
 app = Flask(__name__)
 
 def connection():
@@ -10,7 +9,8 @@ def connection():
         host = 'db',
         user = 'root',
         password ='root',
-        database = 'crud'
+        database = 'crud',
+        port='3306'
     )
 
     return conexao
@@ -26,9 +26,17 @@ def criar_DB():
     conexao.commit()
     conexao.close()
 
+    
+
 def criar_tb():
 
-    conexao = connection()
+    conexao = mysql.connector.connect(
+        host='db',
+        user='root',
+        password='root',
+        database='crud',
+        port='3306'
+    )
 
     x = conexao.cursor()
             
@@ -46,6 +54,11 @@ def criar_tb():
     conexao.commit()           
     x.close()
     conexao.close()
+
+@app.before_request
+def setup():
+    criar_DB()
+    criar_tb()
 
 @app.route('/')
 def index():
@@ -201,6 +214,4 @@ def alterar():
 #     return render_template('agenda.html')
 
 if __name__ == '__main__':
-    criar_DB()
-    criar_tb()
     app.run(host='0.0.0.0', debug=True)
