@@ -7,7 +7,7 @@ services:
     depends_on:
       - db
     environment:
-      - FLASK_ENV=development
+      FLASK_ENV: development
     restart: always
 
   db:
