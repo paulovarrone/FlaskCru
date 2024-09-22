@@ -14,3 +14,24 @@ function mascaraCPF(cpf) {
     valor = valor.replace(/(\d{3})(\d{2})$/, "$1-$2"); // Coloca o hífen
     cpf.value = valor;
 }
+
+document.querySelector('form').addEventListener('submit', function(event) {
+    const rg = document.getElementById('rg');
+    const cpf = document.getElementById('cpf');
+    const telefone = document.getElementById('telefone');
+
+    if (rg.value.length < 9) {
+        alert('O RG deve ter exatamente 9 caracteres');
+        event.preventDefault(); // Impede o envio do formulário
+    }
+
+    if (cpf.value.length < 14) {
+        alert('O CPF deve ter pelo menos 14 caracteres');
+        event.preventDefault(); // Impede o envio do formulário
+    }
+
+    if (telefone.value.length < 15) {
+        alert('O telefone deve ter pelo menos 15 caracteres');
+        event.preventDefault(); // Impede o envio do formulário
+    }
+});
