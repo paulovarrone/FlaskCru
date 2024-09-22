@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Pessoa por CPF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Buscar Paciente</h2>
+        <form action="/buscar" method="POST">
+            <div class="form-group">
+                <label for="nome">Nome do Paciente *:</label>
+                <input type="text" id="nome" name="nome" placeholder="Digite o nome do paciente" required>
+            </div>
+            <button class="button" type="submit">Buscar</button>
+            
+        </form>
+        <br>
+        <a href="/"><button class="button" type="submit">Voltar</button></a>
+
+        <br>
+        <br>
+
+        {% if pessoa %}
+            <div class="result">
+                <p class="res"><strong>Nome: {{pessoa['nome']}}</strong> </p>
+                <p class="res"><strong>Telefone: {{pessoa['telefone']}}</strong> </p>
+                <p class="res"><strong>Endereco: {{pessoa['endereco']}}</strong> </p>
+                <p class="res"><strong>Número: {{pessoa['numero']}}</strong> </p>
+                <p class="res"><strong>Apartamento: {{pessoa['apt']}}</strong> </p>
+                <p class="res"><strong>RG: {{pessoa['rg']}}</strong> </p>
+                <p class="res"><strong>CPF: {{pessoa['cpf']}}</strong> </p>
+                <p class="res"><strong>Convênio: {{pessoa['convenio']}}</strong> </p>
+            </div>
+        {% endif %}    
+        
+        {% if mensagem %}
+            <p class="naoInformado"> {{mensagem}} {{ request.form['nome'] }}</p>
+        {% endif %}
+
+    </div>
+</body>
+</html>
