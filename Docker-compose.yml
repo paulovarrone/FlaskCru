@@ -1,22 +1,25 @@
 name: flaskEsql
 services:
-  crud:
-    build: ./app
-    ports:
-      - "5000:5000"
-    depends_on:
-      - db
-    environment:
-      FLASK_ENV: development
-    restart: always
-
   db:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: crud       
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: 'crud'
+      MYSQL_ROOT_PASSWORD: 'root'
     ports:
       - "3306:3306"
     volumes:
-      - /c/Users/Pichau/Desktop/db:/var/lib/mysql
+      - PATH THO VOLUME  PATH TO COLUME  PATH TO VOLUME  PATH TO VOLUME
+  
+  crud:
+    build: ./app
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+    restart: always
+    entrypoint: ["sh", "-c", "sleep 10 && flask run --host=0.0.0.0"]
+    depends_on:
+      - db
+
+
