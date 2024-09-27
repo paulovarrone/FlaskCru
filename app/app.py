@@ -49,9 +49,9 @@ def criar_tb():
             
     x.execute('''CREATE TABLE IF NOT EXISTS pessoa(
                 nome VARCHAR(100), 
-                telefone VARCHAR(15),
+                telefone VARCHAR(15), 
                 nascimento DATE,
-                tipo_sang VARCHAR(3),
+                tipo_sanguineo VARCHAR(3),
                 endereco VARCHAR(100),
                 numero VARCHAR(10),
                 apt VARCHAR(10),
@@ -75,19 +75,20 @@ def index():
     return render_template('index.html')
 
 @app.route('/cadastro', methods=['GET', 'POST'])
-def cadastro():
-    
+def cadastro():   
     if request.method == 'POST':
         nome = request.form['nome']
         telefone = request.form['telefone']
         nascimento = request.form['nascimento']
-        tipo_sang = request.form['tipo_sang']
+        tipo_sanguineo = request.form['tipo_sanguineo']
         endereco = request.form['endereco']
         numero = request.form['numero']
         apt = request.form['apt']
         rg = request.form['rg']
         cpf = request.form['cpf']
         convenio = request.form['convenio']
+
+        # data_nascimento_mysql = datetime.strptime(nascimento, "%d/%m/%Y").strftime("%Y-%m-%d")
 
         conexao = connection()
         x = conexao.cursor(dictionary=True)
@@ -97,8 +98,8 @@ def cadastro():
             pessoa = x.fetchall()
 
             if not pessoa:
-                query = ("INSERT INTO pessoa(nome, telefone, nascimento, tipo_sang, endereco, numero, apt, rg, cpf, convenio) values(%s, %s ,%s, %s, %s, %s, %s, %s, %s, %s)")
-                valores = (nome,telefone,nascimento,tipo_sang,endereco,numero,apt,rg,cpf,convenio)
+                query = ("INSERT INTO pessoa(nome, telefone, nascimento, tipo_sanguineo, endereco, numero, apt, rg, cpf, convenio) values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                valores = (nome,telefone,nascimento,tipo_sanguineo, endereco,numero,apt,rg,cpf,convenio)
 
                 
                 x.execute(query,valores)
@@ -129,15 +130,16 @@ def cadastro():
 
 @app.route('/buscar', methods=['GET', 'POST'])
 def procurar():
-
     if request.method == 'POST':
         nome = request.form['nome']
-        
+
         # Conectar ao banco de dados
         conexao = connection()
 
         cursor = conexao.cursor(dictionary=True)
-        cursor.execute("SELECT *, TIMESTAMPDIFF(YEAR, nascimento, CURDATE()) AS idade FROM pessoa WHERE nome = %s", (nome,))
+        cursor.execute("""SELECT *, TIMESTAMPDIFF(YEAR, nascimento, CURDATE()) AS idade 
+                FROM pessoa 
+                WHERE nome = %s""", (nome,))
         pessoa = cursor.fetchone()
 
         if not pessoa:
@@ -159,6 +161,7 @@ def procurar():
 
 @app.route('/alterar', methods=['GET', 'POST'])
 def alterar():
+    
     if request.method == 'POST':
         cpf = request.form['cpf']
 
@@ -224,6 +227,7 @@ def alterar():
         return redirect(url_for('alterar'))
 
     return render_template('alterar.html')
+
 
 
 # @app.route('/fixa')

@@ -12,16 +12,22 @@
     <div class="container">
         <h2>Cadastro de Paciente</h2>
         <form action="/cadastro" method="POST">
+
             <div class="form-group">
                 <label for="nome">Nome *:</label>
                 <input type="text" id="nome" name="nome" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="telefone">Telefone *:</label>
-                <input type="text" id="telefone" name="telefone" oninput="mascaraTelefone(this)" minlength="15"  maxlength="15" required>
+                <input type="text" id="telefone" name="telefone" oninput="mascaraTelefone(this)"  maxlength="15" required>
             </div>
-            
+
+            <div class="form-group">
+                <label for="nascimento">Nascimento *:</label>
+                <input type="date" id="nascimento" name="nascimento" required>
+            </div>
+
             <div class="form-group">
                 <label for="endereco">Endereço *:</label>
                 <input type="text" id="endereco" name="endereco" required>
@@ -46,29 +52,29 @@
                 <label for="numero">Número *:</label>
                 <input type="text" id="numero" name="numero" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="apt">Apto *:</label>
                 <input type="text" id="apt" name="apt" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="rg">RG *:</label>
-                <input type="text" id="rg" name="rg" minlength="9" maxlength="9" required>
+                <input type="text" id="rg" name="rg" maxlength="9" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="cpf">CPF *:</label>
-                <input type="text" id="cpf" name="cpf" oninput="mascaraCPF(this)" minlength="14" maxlength="14" required>
+                <input type="text" id="cpf" name="cpf" oninput="mascaraCPF(this)" maxlength="14" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="convenio">Convênio *:</label>
                 <input type="text" id="convenio" name="convenio" required>
             </div>
-            
+
             <button class="button" type="submit">Cadastrar</button>
-            
+
         </form>
         <br>
         <a href="/"><button class="button" type="submit">Voltar</button></a>

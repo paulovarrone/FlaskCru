@@ -28,7 +28,10 @@
         {% if pessoa %}
             <div class="result">
                 <p class="res"><strong>Nome: {{pessoa['nome']}}</strong> </p>
-                <p class="res"><strong>Telefone: {{pessoa['telefone']}}</strong> </p>
+                <p class="res"><strong>Telefone: {{pessoa['telefone']}}</strong> </p> 
+                <p class="res"><strong>Idade: {{pessoa['idade']}} anos</strong> </p> 
+                <p class="res"><strong>Nascimento: {{pessoa['nascimento']}}</strong> </p> 
+                <p class="res"><strong>Tipo sanguineo: {{pessoa['tipo_sanguineo']}}</strong> </p>
                 <p class="res"><strong>Endereco: {{pessoa['endereco']}}</strong> </p>
                 <p class="res"><strong>Número: {{pessoa['numero']}}</strong> </p>
                 <p class="res"><strong>Apartamento: {{pessoa['apt']}}</strong> </p>
@@ -36,9 +39,10 @@
                 <p class="res"><strong>CPF: {{pessoa['cpf']}}</strong> </p>
                 <p class="res"><strong>Convênio: {{pessoa['convenio']}}</strong> </p>
             </div>
-        {%else%}
+        {% else  %}
             {{ validacao() }}
         {% endif %}    
+
         
         
 
