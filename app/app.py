@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector.errors import IntegrityError
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for, flash, session
 
 app = Flask(__name__)
 
@@ -66,7 +66,7 @@ def index():
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
-    cadastro = None
+    
     if request.method == 'POST':
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -79,38 +79,45 @@ def cadastro():
 
         conexao = connection()
         x = conexao.cursor(dictionary=True)
-        x.execute("SELECT * FROM pessoa WHERE cpf = %s OR rg = %s", (cpf,rg))
-        pessoa = x.fetchone()
 
-        if not pessoa:
-            query = ("INSERT INTO pessoa(nome, telefone, endereco, numero, apt, rg, cpf, convenio) values(%s, %s, %s, %s, %s, %s, %s, %s)")
-            valores = (nome,telefone,endereco,numero,apt,rg,cpf,convenio)
+        try:
+            x.execute("SELECT * FROM pessoa WHERE cpf = %s OR rg = %s", (cpf,rg))
+            pessoa = x.fetchall()
 
-            try:
+            if not pessoa:
+                query = ("INSERT INTO pessoa(nome, telefone, endereco, numero, apt, rg, cpf, convenio) values(%s, %s, %s, %s, %s, %s, %s, %s)")
+                valores = (nome,telefone,endereco,numero,apt,rg,cpf,convenio)
 
+                
                 x.execute(query,valores)
 
                 conexao.commit()
 
-                cadastro = 'Cadastro realizado com sucesso.'
+                flash('Cadastro realizado com sucesso.', 'sucesso')
+                    
+            else:
+                if pessoa[0]['cpf'] == cpf:
+                    flash('Usuário já cadastrado com este CPF.', 'erro')
+                elif pessoa[0]['rg'] == rg:
+                    flash('Usuário já cadastrado com este RG.', 'erro')
 
-            except IntegrityError as err:
-                print(f"Erro: {err}")
-                cadastro = 'O usuário já está cadastrado no sistema.'
 
-        else:
-            cadastro = 'O Cadastrado já existe no sistema.'
+        except IntegrityError as err:
+            flash(f"Erro de integridade: {err}", 'erro')
+
         
-        x.close()
-        conexao.close()
+        finally:
+            x.close()
+            conexao.close()
 
-    return render_template('cadastro.html', cadastro=cadastro)
+        return redirect(url_for('cadastro'))
+    
+    return render_template('cadastro.html')
 
 
 @app.route('/buscar', methods=['GET', 'POST'])
 def procurar():
-    pessoa = None
-    mensagem = None
+
     if request.method == 'POST':
         nome = request.form['nome']
         
@@ -122,24 +129,23 @@ def procurar():
         pessoa = cursor.fetchone()
 
         if not pessoa:
-            mensagem = "Usuário não encontrado no sistema: "
-            pessoa = None
+            flash("Usuário não encontrado no sistema.", 'erro')
         else:
-            # Buscar a pessoa pelo CPF
-            query = "SELECT nome, telefone, endereco, numero, apt, rg, cpf, convenio FROM pessoa WHERE nome = %s"
-            cursor.execute(query, (nome,))
-            # Retorna a primeira pessoa encontrada
-            pessoa = cursor.fetchone()  
+            session['pessoa'] = pessoa
+            return redirect(url_for('procurar')) 
         
         cursor.close()
         conexao.close()
 
-    return render_template('buscar.html', pessoa=pessoa, mensagem=mensagem)
+        return redirect(url_for('procurar'))
+    
+    pessoa = session.pop('pessoa', None)
+
+    return render_template('buscar.html', pessoa=pessoa)
 
 
 @app.route('/alterar', methods=['GET', 'POST'])
 def alterar():
-    mensagem = None
     if request.method == 'POST':
         cpf = request.form['cpf']
 
@@ -149,7 +155,7 @@ def alterar():
         pessoa = cursor.fetchone()
 
         if not pessoa:
-            mensagem = "CPF não encontrado no sistema."
+            flash("CPF não encontrado no sistema.", 'erro')
         else:
             nome = request.form.get('nome')
             telefone = request.form.get('telefone')
@@ -195,14 +201,16 @@ def alterar():
                 conexao.commit()
                 
 
-                mensagem = "Dados alterados com sucesso!"
+                flash("Dados alterados com sucesso!", 'sucesso')
             else:
-                mensagem = "Nenhum campo para alterar."
+                flash("Nenhum campo para alterar.", 'erro')
 
         cursor.close()
         conexao.close()
 
-    return render_template('alterar.html', mensagem=mensagem)
+        return redirect(url_for('alterar'))
+
+    return render_template('alterar.html')
 
 
 # @app.route('/fixa')
