@@ -8,12 +8,14 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+user = os.getenv('DB_USER')
+password = os.getenv('DB_PASSWORD')
 
 def connection():
     conexao = mysql.connector.connect(
         host = 'db',
-        user=os.getenv('DB_USER'),          
-        password=os.getenv('DB_PASSWORD'),
+        user=user,          
+        password=password,
         database = 'crud',
         port='3306'
     )
@@ -23,8 +25,8 @@ def connection():
 def criar_DB():
     conexao = mysql.connector.connect(
         host='db',
-        user=os.getenv('DB_USER'),          
-        password=os.getenv('DB_PASSWORD'),
+        user=user,       
+        password=password,
     )
     x = conexao.cursor()
     x.execute('CREATE DATABASE IF NOT EXISTS crud')
@@ -37,8 +39,8 @@ def criar_tb():
 
     conexao = mysql.connector.connect(
         host='db',
-        user=os.getenv('DB_USER'),          
-        password=os.getenv('DB_PASSWORD'),
+        user=user,        
+        password=password,
         database='crud',
         port='3306'
     )
