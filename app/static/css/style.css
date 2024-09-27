@@ -114,3 +114,50 @@ a {
     font-weight: bold;
     font-size: 20px;
 }
+
+
+/* Estilos gerais */
+.tipo-sanguineo-container {
+    margin-bottom: 15px;
+}
+
+/* Label para o campo tipo sanguíneo */
+label[for="tipo_sanguineo"] {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Estilos para o select do tipo sanguíneo */
+#tipo_sanguineo {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* Container do campo de nascimento */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Estilo para o label do campo nascimento */
+label[for="nascimento"] {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Estilo para o input de data */
+input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+}
