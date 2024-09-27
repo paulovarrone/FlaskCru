@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: 'crud'
-      MYSQL_ROOT_PASSWORD: ${PASSWORD_DB}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -18,8 +18,8 @@ services:
     environment:
       FLASK_ENV: development
       SECRET_KEY: ${SECRET_KEY}
-      DB_USER: ${USER_DB} 
-      DB_PASSWORD: ${PASSWORD_DB} 
+      DB_USER: ${DB_USER} 
+      DB_PASSWORD: ${DB_PASSWORD} 
     restart: always
     entrypoint: ["sh", "-c", "sleep 10 && flask run --host=0.0.0.0"]
     depends_on:
