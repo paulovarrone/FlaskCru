@@ -49,13 +49,16 @@ def criar_tb():
             
     x.execute('''CREATE TABLE IF NOT EXISTS pessoa(
                 nome VARCHAR(100), 
-                telefone VARCHAR(15), 
+                telefone VARCHAR(15),
+                nascimento DATE,
+                tipo_sang VARCHAR(3),
                 endereco VARCHAR(100),
                 numero VARCHAR(10),
                 apt VARCHAR(10),
                 rg VARCHAR(9) UNIQUE,
                 cpf VARCHAR(14) PRIMARY KEY,
-                convenio VARCHAR(50)
+                convenio VARCHAR(50),
+                fichaMedica LONGTEXT
     )''')
     
     conexao.commit()           
@@ -77,6 +80,8 @@ def cadastro():
     if request.method == 'POST':
         nome = request.form['nome']
         telefone = request.form['telefone']
+        nascimento = request.form['nascimento']
+        tipo_sang = request.form['tipo_sang']
         endereco = request.form['endereco']
         numero = request.form['numero']
         apt = request.form['apt']
@@ -92,8 +97,8 @@ def cadastro():
             pessoa = x.fetchall()
 
             if not pessoa:
-                query = ("INSERT INTO pessoa(nome, telefone, endereco, numero, apt, rg, cpf, convenio) values(%s, %s, %s, %s, %s, %s, %s, %s)")
-                valores = (nome,telefone,endereco,numero,apt,rg,cpf,convenio)
+                query = ("INSERT INTO pessoa(nome, telefone, nascimento, tipo_sang, endereco, numero, apt, rg, cpf, convenio) values(%s, %s ,%s, %s, %s, %s, %s, %s, %s, %s)")
+                valores = (nome,telefone,nascimento,tipo_sang,endereco,numero,apt,rg,cpf,convenio)
 
                 
                 x.execute(query,valores)
@@ -132,14 +137,15 @@ def procurar():
         conexao = connection()
 
         cursor = conexao.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM pessoa WHERE nome = %s", (nome,))
+        cursor.execute("SELECT *, TIMESTAMPDIFF(YEAR, nascimento, CURDATE()) AS idade FROM pessoa WHERE nome = %s", (nome,))
         pessoa = cursor.fetchone()
 
         if not pessoa:
             flash("Usuário não encontrado no sistema.", 'erro')
         else:
+            pessoa['nascimento'] = pessoa['nascimento'].strftime('%d/%m/%Y')
             session['pessoa'] = pessoa
-            return redirect(url_for('procurar')) 
+            
         
         cursor.close()
         conexao.close()
