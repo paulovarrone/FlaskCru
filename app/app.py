@@ -12,8 +12,8 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 def connection():
     conexao = mysql.connector.connect(
         host = 'db',
-        user = 'root',
-        password ='root',
+        user=os.getenv('DB_USER'),          
+        password=os.getenv('DB_PASSWORD'),
         database = 'crud',
         port='3306'
     )
@@ -23,8 +23,8 @@ def connection():
 def criar_DB():
     conexao = mysql.connector.connect(
         host='db',
-        user='root',
-        password='root'
+        user=os.getenv('DB_USER'),          
+        password=os.getenv('DB_PASSWORD'),
     )
     x = conexao.cursor()
     x.execute('CREATE DATABASE IF NOT EXISTS crud')
@@ -37,8 +37,8 @@ def criar_tb():
 
     conexao = mysql.connector.connect(
         host='db',
-        user='root',
-        password='root',
+        user=os.getenv('DB_USER'),          
+        password=os.getenv('DB_PASSWORD'),
         database='crud',
         port='3306'
     )
