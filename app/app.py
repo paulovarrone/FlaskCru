@@ -1,8 +1,13 @@
 import mysql.connector
 from mysql.connector.errors import IntegrityError
 from flask import Flask, request, render_template, redirect, url_for, flash, session
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 def connection():
     conexao = mysql.connector.connect(
