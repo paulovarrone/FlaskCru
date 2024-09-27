@@ -1,3 +1,5 @@
+{% from "macros/macros.jinja2" import validacao %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -50,9 +52,7 @@
         <br>
         <br>
         
-        {% if cadastro %}
-            <p class="cadastro">{{ cadastro }}</p>
-        {% endif %}
+        {{ validacao() }}
 
     </div>
 

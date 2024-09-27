@@ -1,3 +1,5 @@
+{% from "macros/macros.jinja2" import validacao %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -46,9 +48,7 @@
         <br>
         <br>
 
-        {% if mensagem %}
-            <p class="alterar">{{ mensagem }}</p>
-        {% endif %}
+        {{ validacao() }}
 
         <script src="{{ url_for('static', filename='scripts/scripts.js') }}"></script>
     </div>

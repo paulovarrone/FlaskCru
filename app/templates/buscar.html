@@ -1,3 +1,5 @@
+{% from "macros/macros.jinja2" import validacao %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -34,11 +36,11 @@
                 <p class="res"><strong>CPF: {{pessoa['cpf']}}</strong> </p>
                 <p class="res"><strong>Convênio: {{pessoa['convenio']}}</strong> </p>
             </div>
+        {%else%}
+            {{ validacao() }}
         {% endif %}    
         
-        {% if mensagem %}
-            <p class="naoInformado"> {{mensagem}} {{ request.form['nome'] }}</p>
-        {% endif %}
+        
 
     </div>
 </body>
