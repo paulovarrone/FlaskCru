@@ -102,3 +102,15 @@ a {
     font-weight: 700;
     font-size: 20px;
 }
+
+.sucesso {
+    color: green;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.erro {
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+}
