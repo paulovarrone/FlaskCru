@@ -1,8 +1,9 @@
 import mysql.connector
 from mysql.connector.errors import IntegrityError
-from flask import Flask, request, render_template, redirect, url_for, flash, session
+from flask import Flask, request, render_template, redirect, url_for, flash, session, jsonify
 from dotenv import load_dotenv
 import os
+from datetime import time, timedelta, datetime
 
 load_dotenv()
 
@@ -33,21 +34,13 @@ def criar_DB():
     conexao.commit()
     conexao.close()
 
-    
-
 def criar_tb():
 
-    conexao = mysql.connector.connect(
-        host='db',
-        user=user,        
-        password=password,
-        database='crud',
-        port='3306'
-    )
-
-    x = conexao.cursor()
+    conexao = connection()
+    cursor = conexao.cursor()
             
-    x.execute('''CREATE TABLE IF NOT EXISTS pessoa(
+    cursor.execute('''CREATE TABLE IF NOT EXISTS pessoa(
+                id INT AUTO_INCREMENT PRIMARY KEY,
                 nome VARCHAR(100), 
                 telefone VARCHAR(15), 
                 nascimento DATE,
@@ -56,19 +49,39 @@ def criar_tb():
                 numero VARCHAR(10),
                 apt VARCHAR(10),
                 rg VARCHAR(9) UNIQUE,
-                cpf VARCHAR(14) PRIMARY KEY,
+                cpf VARCHAR(14) UNIQUE,
                 convenio VARCHAR(50),
                 fichaMedica LONGTEXT
     )''')
     
     conexao.commit()           
-    x.close()
+    cursor.close()
+    conexao.close()
+
+def criar_con():
+    conexao = connection()
+    cursor = conexao.cursor()
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS consulta (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    nome VARCHAR(100), 
+                    telefone VARCHAR(15),
+                    data DATE,
+                    hora TIME,  
+                    UNIQUE (data, hora)
+                    
+    )''')
+
+
+    conexao.commit()           
+    cursor.close()
     conexao.close()
 
 @app.before_request
 def setup():
     criar_DB()
     criar_tb()
+    criar_con()
 
 @app.route('/')
 def index():
@@ -91,18 +104,18 @@ def cadastro():
         # data_nascimento_mysql = datetime.strptime(nascimento, "%d/%m/%Y").strftime("%Y-%m-%d")
 
         conexao = connection()
-        x = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True)
 
         try:
-            x.execute("SELECT * FROM pessoa WHERE cpf = %s OR rg = %s", (cpf,rg))
-            pessoa = x.fetchall()
+            cursor.execute("SELECT * FROM pessoa WHERE cpf = %s OR rg = %s", (cpf,rg))
+            pessoa = cursor.fetchall()
 
             if not pessoa:
                 query = ("INSERT INTO pessoa(nome, telefone, nascimento, tipo_sanguineo, endereco, numero, apt, rg, cpf, convenio) values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
                 valores = (nome,telefone,nascimento,tipo_sanguineo, endereco,numero,apt,rg,cpf,convenio)
 
                 
-                x.execute(query,valores)
+                cursor.execute(query,valores)
 
                 conexao.commit()
 
@@ -120,7 +133,7 @@ def cadastro():
 
         
         finally:
-            x.close()
+            cursor.close()
             conexao.close()
 
         return redirect(url_for('cadastro'))
@@ -229,14 +242,172 @@ def alterar():
     return render_template('alterar.html')
 
 
+@app.route('/ficha', methods=['GET', 'POST'])
+def ficha():
+    fichaMedica = ""  # Inicializa a variável
+    nome = ""
 
-# @app.route('/fixa')
-# def fixa():
-#     return render_template('fixa.html')
+    if request.method == 'POST':
+        nome = request.form['nome']
+        action = request.form.get('action')  # Obter a ação do botão
 
-# @app.route('/agenda')
-# def agenda():
-#     return render_template('agenda.html')
+        if action == "cadastrar":
+            fichaMedica = request.form['fichaMedica']
+            conexao = connection()
+            cursor = conexao.cursor(dictionary=True)
+
+            try:
+                query = ("UPDATE pessoa SET fichaMedica = %s WHERE nome = %s")
+                valores = (fichaMedica, nome)
+
+                cursor.execute(query, valores)
+                conexao.commit()
+
+                if cursor.rowcount > 0:
+                    flash('Ficha cadastrada com sucesso.', 'sucesso')
+                else:
+                    flash('Nenhum registro encontrado para atualizar.', 'erro')
+
+            except Exception as e:
+                flash(f'A ficha não foi cadastrada: {str(e)}', 'erro')
+
+            finally:
+                cursor.close()
+                conexao.close()
+
+        elif action == "consultar":
+            conexao = connection()
+            cursor = conexao.cursor(dictionary=True)
+            cursor.execute("SELECT fichaMedica FROM pessoa WHERE nome = %s", (nome,))
+            result = cursor.fetchone()
+            if result:
+                fichaMedica = result['fichaMedica']  # Atribua o valor encontrado
+            else:
+                flash('Nenhum registro encontrado para consulta.', 'erro')
+            cursor.close()
+            conexao.close()
+        
+            
+            session['fichaMedica'] = fichaMedica
+            session['nome'] = nome
+            
+            return redirect(url_for('ficha'))  # Redirecionar para evitar envio duplicado
+
+    # Recuperar dados da sessão para preenchimento nos campos
+    fichaMedica = session.pop('fichaMedica', "")
+    nome = session.pop('nome', "")
+
+    return render_template('ficha.html', fichaMedica=fichaMedica, nome=nome)
+
+
+@app.route('/api/events')
+def events():
+    conexao = connection()  
+    cursor = conexao.cursor(dictionary=True)
+    cursor.execute("SELECT nome, telefone, data, hora FROM consulta")
+    events = cursor.fetchall()
+    
+    
+    calendar_events = []
+    for event in events:
+        
+        formatted_date = event['data'].strftime('%Y-%m-%d')  
+
+        
+        if isinstance(event['hora'], datetime):  
+            hora = event['hora'].time()  
+        elif isinstance(event['hora'], timedelta):  
+            hora = (datetime.min + event['hora']).time() 
+        else:
+            raise TypeError("O campo 'hora' deve ser um objeto datetime ou timedelta.")
+
+        formatted_time = hora.strftime('%H:%M')  
+
+        
+        start_datetime = datetime.combine(event['data'], hora)  
+        end_datetime = start_datetime + timedelta(minutes=1)  
+        formatted_end_date = end_datetime.strftime('%Y-%m-%d')  
+        formatted_end_time = end_datetime.strftime('%H:%M')  
+
+        calendar_events.append({
+            'id': event['telefone'],  
+            'title': event['nome'],
+            'start': formatted_date + 'T' + formatted_time,  
+            'end': formatted_end_date + 'T' + formatted_end_time  
+        })
+
+    cursor.close()
+    conexao.close()
+    
+    return jsonify(calendar_events)
+
+
+
+@app.route('/api/consulta', methods=['POST'])
+def add_consulta():
+    nome = request.form.get('nome')
+    telefone = request.form.get('telefone')
+    data = request.form.get('data')
+    hora = request.form.get('hora')
+
+    conexao = connection()
+    cursor = conexao.cursor()
+    cursor.execute("INSERT INTO consulta (nome, telefone, data, hora) VALUES (%s, %s, %s, %s)",
+                   (nome, telefone, data, hora))
+    conexao.commit()
+
+    cursor.close()
+    conexao.close()
+
+    return jsonify({'message': 'Consulta marcada com sucesso'}), 201
+
+
+# Exemplo de como os eventos podem ser retornados do seu endpoint
+@app.route('/api/events', methods=['GET'])
+def get_events():
+    conexao = connection()  # Usando a variável conexao
+    cursor = conexao.cursor()
+
+    # Busca todos os eventos no banco de dados
+    cursor.execute("SELECT telefone, data, hora FROM consulta")
+    eventos = cursor.fetchall()
+
+    # Formata os eventos para o formato que o FullCalendar espera
+    eventos_formatados = [{
+        'id': telefone,  # Usando o telefone como ID do evento
+        'title': 'Consulta',  # O título do evento pode ser fixo ou dinâmico
+        'start': data,  # Usando apenas a data
+        'hora': hora,  # Se necessário, mas não será exibido
+    } for telefone, data, hora in eventos]
+
+    return jsonify(eventos_formatados)
+
+
+
+@app.route('/api/delete-event/<event_id>', methods=['DELETE'])
+def delete_event(event_id):
+    data = request.get_json()
+    date = data.get('date')
+    hora = data.get('time')
+
+    conexao = connection()
+    cursor = conexao.cursor()
+    print(f"ID do evento: {event_id}")
+    print(f"Data recebida: {date}")
+    print(f"Hora recebida: {hora}")
+    # Construa sua consulta SQL para garantir que o evento correto seja removido
+    cursor.execute("DELETE FROM consulta WHERE telefone = %s AND DATE(data) = %s AND TIME(hora) = %s", (event_id, date, hora))
+    
+    conexao.commit()
+    cursor.close()
+    conexao.close()
+    
+    return jsonify({'status': 'Consulta removida com sucesso!'})
+
+
+@app.route('/agenda')
+def agenda():
+    return render_template('agenda.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
