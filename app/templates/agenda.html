@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+
+</head>
+<body>
+    <div id='calendar'></div>
+    <div id="form-c">
+        <form onsubmit="submitForm(event)">
+            <label for="selected-date">Data:</label>
+            <input type="text" id="selected-date" name="data" readonly />
+            <br>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required />
+            <br>
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" name="telefone" required />
+            <br>
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" name="hora" required />
+            <br>
+            <button type="submit">Marcar Consulta</button>
+            
+        </form>
+        <br><br>
+        <button id="fechar">Fechar </button>
+    </div>
+
+    <div id="info-box" style="display:none;">
+        <h3 id="info-title"></h3>
+        <p id="info-details"></p>
+        <button id="remove-event">Remover Consulta</button>
+        <button id="close-box">Fechar</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts/calendar.js') }}"></script>
+</body>
+</html>
