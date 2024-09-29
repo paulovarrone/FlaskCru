@@ -1,0 +1,109 @@
+#calendar {
+    max-width: 1000px;
+    margin: 40px auto;
+    position: relative;
+}
+
+#form-c {
+    display: none; /* Mantenha esta propriedade para ocultar o formulário inicialmente */
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 100px;
+    border: none;
+    border-radius: 10px;
+    background: #cfecf6;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: absolute; /* Permite posicionar o formulário em relação ao contêiner pai */
+    top: 190px; /* Ajuste a posição vertical do formulário */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajusta a posição horizontal */
+    z-index: 1000;
+}
+
+#form-c h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    text-align: center;
+}
+
+#form-c label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-family: 'Arial', sans-serif;
+}
+
+#form-c input[type="text"],
+#form-c input[type="date"],
+#form-c input[type="time"],
+#form-c input[type="tel"],
+#form-c input[type="email"],
+#form-c select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+#form-c input[type="text"]:focus,
+#form-c input[type="date"]:focus,
+#form-c input[type="time"]:focus,
+#form-c input[type="tel"]:focus,
+#form-c input[type="email"]:focus,
+#form-c select:focus {
+    border-color: #007bff; /* Cor de destaque ao focar no campo */
+    outline: none;
+}
+
+#form-c button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#form-c button:hover {
+    background-color: #0056b3; /* Cor ao passar o mouse */
+}
+
+#form-c .error {
+    color: #d9534f; /* Cor para mensagens de erro */
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+
+
+#info-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    z-index: 1000; /* Para garantir que fique acima de outros elementos */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#info-box h3 {
+    margin: 0 0 10px;
+}
+
+#info-box button {
+    margin-top: 10px;
+}
