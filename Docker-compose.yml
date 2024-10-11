@@ -7,7 +7,7 @@ services:
       MYSQL_DATABASE: 'crud'
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3306:3306".
     volumes:
       - PATH THO VOLUME  PATH TO COLUME  PATH TO VOLUME  PATH TO VOLUME
   
