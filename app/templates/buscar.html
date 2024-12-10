@@ -13,8 +13,12 @@
         <h2>Buscar Paciente</h2>
         <form action="/buscar" method="POST">
             <div class="form-group">
-                <label for="nome">Nome do Paciente *:</label>
+                <label for="nome">Nome do Paciente:</label>
                 <input type="text" id="nome" name="nome" placeholder="Digite o nome do paciente" required>
+                <br>
+                <br>
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf" oninput="mascaraCPF(this)" maxlength="14" placeholder="Digite o cpf do paciente">
             </div>
             <button class="button" type="submit">Buscar</button>
             
@@ -47,5 +51,7 @@
         
 
     </div>
+
+    <script src="{{ url_for('static', filename='scripts/scripts.js') }}"></script>
 </body>
 </html>

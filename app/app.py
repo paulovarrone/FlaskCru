@@ -145,14 +145,14 @@ def cadastro():
 def procurar():
     if request.method == 'POST':
         nome = request.form['nome']
-
+        cpf = request.form['cpf']
         # Conectar ao banco de dados
         conexao = connection()
 
         cursor = conexao.cursor(dictionary=True)
         cursor.execute("""SELECT *, TIMESTAMPDIFF(YEAR, nascimento, CURDATE()) AS idade 
                 FROM pessoa 
-                WHERE nome = %s""", (nome,))
+                WHERE nome = %s OR cpf = %s""", (nome,cpf))
         pessoa = cursor.fetchone()
 
         if not pessoa:
