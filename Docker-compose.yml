@@ -1,17 +1,19 @@
-name: flaskEsql
+name: consultorio
 services:
-  db:
+  mysql:
+    container_name: mysql
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: 'crud'
+      MYSQL_DATABASE: 'consultorio'
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
-      - PATH THO VOLUME  PATH TO COLUME  PATH TO VOLUME  PATH TO VOLUME
+      - /c/Users/Pichau/Desktop/db:/var/lib/mysql
   
-  crud:
+  flask:
+    container_name: flask-web
     build: ./app
     ports:
       - "5000:5000"
@@ -23,6 +25,6 @@ services:
     restart: always
     entrypoint: ["sh", "-c", "sleep 10 && flask run --host=0.0.0.0"]
     depends_on:
-      - db
+      - mysql
 
 
