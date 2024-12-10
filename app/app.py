@@ -14,10 +14,10 @@ password = os.getenv('DB_PASSWORD')
 
 def connection():
     conexao = mysql.connector.connect(
-        host = 'db',
+        host = 'mysql',
         user=user,          
         password=password,
-        database = 'crud',
+        database = 'consultorio',
         port='3306'
     )
 
@@ -25,12 +25,12 @@ def connection():
 
 def criar_DB():
     conexao = mysql.connector.connect(
-        host='db',
+        host='mysql',
         user=user,       
         password=password,
     )
     x = conexao.cursor()
-    x.execute('CREATE DATABASE IF NOT EXISTS crud')
+    x.execute('CREATE DATABASE IF NOT EXISTS consultorio')
     conexao.commit()
     conexao.close()
 
@@ -300,6 +300,47 @@ def ficha():
     return render_template('ficha.html', fichaMedica=fichaMedica, nome=nome)
 
 
+# @app.route('/api/events')
+# def events():
+#     conexao = connection()  
+#     cursor = conexao.cursor(dictionary=True)
+#     cursor.execute("SELECT nome, telefone, data, hora FROM consulta")
+#     events = cursor.fetchall()
+    
+    
+#     calendar_events = []
+#     for event in events:
+        
+#         formatted_date = event['data'].strftime('%Y-%m-%d')  
+
+        
+#         if isinstance(event['hora'], datetime):  
+#             hora = event['hora'].time()  
+#         elif isinstance(event['hora'], timedelta):  
+#             hora = (datetime.min + event['hora']).time() 
+#         else:
+#             raise TypeError("O campo 'hora' deve ser um objeto datetime ou timedelta.")
+
+#         formatted_time = hora.strftime('%H:%M')  
+
+        
+#         start_datetime = datetime.combine(event['data'], hora)  
+#         end_datetime = start_datetime + timedelta(minutes=1)  
+#         formatted_end_date = end_datetime.strftime('%Y-%m-%d')  
+#         formatted_end_time = end_datetime.strftime('%H:%M')  
+
+#         calendar_events.append({
+#             'id': event['telefone'],  
+#             'title': event['nome'],
+#             'start': formatted_date + 'T' + formatted_time,  
+#             'end': formatted_end_date + 'T' + formatted_end_time  
+#         })
+
+#     cursor.close()
+#     conexao.close()
+    
+#     return jsonify(calendar_events)
+
 @app.route('/api/events')
 def events():
     conexao = connection()  
@@ -313,7 +354,6 @@ def events():
         
         formatted_date = event['data'].strftime('%Y-%m-%d')  
 
-        
         if isinstance(event['hora'], datetime):  
             hora = event['hora'].time()  
         elif isinstance(event['hora'], timedelta):  
@@ -323,7 +363,6 @@ def events():
 
         formatted_time = hora.strftime('%H:%M')  
 
-        
         start_datetime = datetime.combine(event['data'], hora)  
         end_datetime = start_datetime + timedelta(minutes=1)  
         formatted_end_date = end_datetime.strftime('%Y-%m-%d')  
@@ -333,7 +372,10 @@ def events():
             'id': event['telefone'],  
             'title': event['nome'],
             'start': formatted_date + 'T' + formatted_time,  
-            'end': formatted_end_date + 'T' + formatted_end_time  
+            'end': formatted_end_date + 'T' + formatted_end_time,
+            'extendedProps': {
+                'phone': event['telefone']
+            }
         })
 
     cursor.close()
