@@ -1,4 +1,9 @@
-tirar tipo sanguineo de obrgatorio
+tirar tipo sanguineo de obrgatorio *
+
+Buscar pelo nome ou Cpf *
+
+colocar nome telefone celular *
+
 colocar a ficha para puxar todos do dia
-Buscar pelo nome ou Cpf
-Colocar alem do telefone o celular
+colocar uma mensagem no zap com a hora confirmando consulta para o dia
+colocar o menu em todas as paginas
