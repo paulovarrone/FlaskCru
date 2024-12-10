@@ -1,0 +1,4 @@
+tirar tipo sanguineo de obrgatorio
+colocar a ficha para puxar todos do dia
+Buscar pelo nome ou Cpf
+Colocar alem do telefone o celular
