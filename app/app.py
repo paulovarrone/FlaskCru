@@ -189,6 +189,7 @@ def alterar():
             nome = request.form.get('nome')
             telefone = request.form.get('telefone')
             endereco = request.form.get('endereco')
+            tipo_sanguineo = request.form.get('tipo_sanguineo')
             numero = request.form.get('numero')
             apt = request.form.get('apt')
             convenio = request.form.get('convenio')
@@ -207,6 +208,9 @@ def alterar():
             if endereco:
                 fields.append("endereco = %s")
                 values.append(endereco)
+            if tipo_sanguineo:
+                fields.append("tipo_sanguineo = %s")
+                values.append(tipo_sanguineo)
             if numero:
                 fields.append("numero = %s")
                 values.append(numero)
