@@ -14,29 +14,29 @@
         <form action="/cadastro" method="POST">
 
             <div class="form-group">
-                <label for="nome">Nome *:</label>
-                <input type="text" id="nome" name="nome" required>
+                <label for="nome">Nome <span class="obrigatorio">*</span>:</label>
+                <input type="text" id="nome" name="nome" required placeholder="Digite o nome do paciente">
             </div>
 
             <div class="form-group">
-                <label for="telefone">Telefone Celular *:</label>
-                <input type="text" id="telefone" name="telefone" oninput="mascaraTelefone(this)"  maxlength="15" required>
+                <label for="telefone">Telefone Celular <span class="obrigatorio">*</span>:</label>
+                <input type="text" id="telefone" name="telefone" oninput="mascaraTelefone(this)"  maxlength="15" required placeholder="Digite o telefone do paciente">
             </div>
 
             <div class="form-group">
-                <label for="nascimento">Nascimento *:</label>
+                <label for="nascimento">Nascimento <span class="obrigatorio">*</span>:</label>
                 <input type="date" id="nascimento" name="nascimento" required>
             </div>
 
             <div class="form-group">
-                <label for="endereco">Endereço *:</label>
-                <input type="text" id="endereco" name="endereco" required>
+                <label for="endereco">Endereço <span class="obrigatorio">*</span>:</label>
+                <input type="text" id="endereco" name="endereco" required placeholder="Digite o endereço do paciente">
             </div>
 
             <div class="form-group">
                 <label for="tipo_sanguineo">Tipo Sanguíneo:</label>
                 <select id="tipo_sanguineo" name="tipo_sanguineo">
-                    <option value="">Selecione</option>
+                    <option value="">Selecione o tipo sanguíneo</option>
                     <option value="A+">A+</option>
                     <option value="A-">A-</option>
                     <option value="B+">B+</option>
@@ -49,28 +49,28 @@
             </div>
 
             <div class="form-group">
-                <label for="numero">Número *:</label>
-                <input type="text" id="numero" name="numero" required>
+                <label for="numero">Número <span class="obrigatorio">*</span>:</label>
+                <input type="text" id="numero" name="numero" required placeholder="Digite o número do logradouro">
             </div>
 
             <div class="form-group">
-                <label for="apt">Apto *:</label>
-                <input type="text" id="apt" name="apt" required>
+                <label for="apt">Apto:</label>
+                <input type="text" id="apt" name="apt" placeholder="Digite o n° do apartamento SE NECESSÁRIO">
             </div>
 
             <div class="form-group">
-                <label for="rg">RG *:</label>
-                <input type="text" id="rg" name="rg" maxlength="9" required>
+                <label for="rg">RG <span class="obrigatorio">*</span>:</label>
+                <input type="text" id="rg" name="rg" maxlength="9" required placeholder="Digite o RG do paciente">
             </div>
 
             <div class="form-group">
-                <label for="cpf">CPF *:</label>
-                <input type="text" id="cpf" name="cpf" oninput="mascaraCPF(this)" maxlength="14" required>
+                <label for="cpf">CPF <span class="obrigatorio">*</span>:</label>
+                <input type="text" id="cpf" name="cpf" oninput="mascaraCPF(this)" maxlength="14" required placeholder="Digite o CPF do paciente">
             </div>
 
             <div class="form-group">
-                <label for="convenio">Convênio *:</label>
-                <input type="text" id="convenio" name="convenio" required>
+                <label for="convenio">Convênio <span class="obrigatorio">*</span>:</label>
+                <input type="text" id="convenio" name="convenio" required placeholder="Digite o nome do convênio ou particular">
             </div>
 
             <button class="button" type="submit">Cadastrar</button>
