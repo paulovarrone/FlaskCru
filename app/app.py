@@ -408,25 +408,25 @@ def add_consulta():
     return jsonify({'message': 'Consulta marcada com sucesso'}), 201
 
 
-# Exemplo de como os eventos podem ser retornados do seu endpoint
-@app.route('/api/events', methods=['GET'])
-def get_events():
-    conexao = connection()  # Usando a variável conexao
-    cursor = conexao.cursor()
+# # Exemplo de como os eventos podem ser retornados do seu endpoint
+# @app.route('/api/events', methods=['GET'])
+# def get_events():
+#     conexao = connection()  # Usando a variável conexao
+#     cursor = conexao.cursor()
 
-    # Busca todos os eventos no banco de dados
-    cursor.execute("SELECT telefone, data, hora FROM consulta")
-    eventos = cursor.fetchall()
+#     # Busca todos os eventos no banco de dados
+#     cursor.execute("SELECT telefone, data, hora FROM consulta")
+#     eventos = cursor.fetchall()
 
-    # Formata os eventos para o formato que o FullCalendar espera
-    eventos_formatados = [{
-        'id': telefone,  # Usando o telefone como ID do evento
-        'title': 'Consulta',  # O título do evento pode ser fixo ou dinâmico
-        'start': data,  # Usando apenas a data
-        'hora': hora,  # Se necessário, mas não será exibido
-    } for telefone, data, hora in eventos]
+#     # Formata os eventos para o formato que o FullCalendar espera
+#     eventos_formatados = [{
+#         'id': telefone,  # Usando o telefone como ID do evento
+#         'title': 'Consulta',  # O título do evento pode ser fixo ou dinâmico
+#         'start': data,  # Usando apenas a data
+#         'hora': hora,  # Se necessário, mas não será exibido
+#     } for telefone, data, hora in eventos]
 
-    return jsonify(eventos_formatados)
+#     return jsonify(eventos_formatados)
 
 
 
