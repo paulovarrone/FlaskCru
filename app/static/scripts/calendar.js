@@ -48,9 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const phoneElement = document.getElementById('info-phone');
         if (phone) {
             const sanitizedPhone = phone.replace(/\D/g, ''); // Remove caracteres não numéricos
+            const message = `Olá ${title}, aqui é do consultório da Dra. Giovanna. Poderíamos confirmar sua consulta no dia ${eventStart.toLocaleDateString()} às ${eventStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}?`;
+            const whatsappLink = `https://wa.me/55${sanitizedPhone}?text=${encodeURIComponent(message)}`;
+            
             phoneElement.innerHTML = `
                 ${phone} 
-                (<a href="https://wa.me/+55${sanitizedPhone}" target="_blank">WhatsApp</a>)
+                (<a href="${whatsappLink}" target="blank" >WhatsApp</a>)
             `;
         } else {
             phoneElement.innerHTML = 'N/A';
@@ -60,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('remove-event').dataset.eventId = eventId;
     
         const eventDate = eventStart.toISOString().split('T')[0]; // Data no formato YYYY-MM-DD
-        const eventTime = eventStart.toTimeString().split(' ')[0]; // Hora no formato HH:mm:ss
+        const eventTime = eventStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Hora no formato HH:mm
     
         document.getElementById('remove-event').dataset.eventDate = eventDate; // Armazena data no botão
         document.getElementById('remove-event').dataset.eventTime = eventTime; // Armazena hora no botão
@@ -163,7 +166,13 @@ function submitForm(event) {
     });
 }
 
-
+function mascaraTelefone(telefone) {
+    let valor = telefone.value;
+    valor = valor.replace(/\D/g, ''); // Remove tudo que não for dígito
+    valor = valor.replace(/^(\d{2})(\d)/g, "($1) $2"); // Coloca os parênteses no DDD
+    valor = valor.replace(/(\d)(\d{4})$/, "$1-$2"); // Coloca o hífen entre o 4º e 5º dígito
+    telefone.value = valor;
+}
 
 
 
