@@ -1,5 +1,5 @@
 
-
+Consertar o bug de nao estar removendo consulta ********
 
 colocar a ficha para puxar todos do dia
 colocar o menu em todas as paginas
