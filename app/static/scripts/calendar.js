@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             phoneElement.innerHTML = `
                 ${phone} 
-                (<a href="${whatsappLink}" target="blank" >WhatsApp</a>)
+                (<a href="${whatsappLink}" target="_blank" >WhatsApp</a>)
             `;
         } else {
             phoneElement.innerHTML = 'N/A';
