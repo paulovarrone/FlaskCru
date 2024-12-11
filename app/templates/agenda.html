@@ -16,7 +16,7 @@
             <input type="text" id="nome" name="nome" required />
             <br>
             <label for="telefone">Telefone:</label>
-            <input type="text" id="telefone" name="telefone" required />
+            <input type="text" id="telefone" name="telefone" required oninput="mascaraTelefone(this)" minlength="15" maxlength="15"/>
             <br>
             <label for="hora">Hora:</label>
             <input type="time" id="hora" name="hora" required />
