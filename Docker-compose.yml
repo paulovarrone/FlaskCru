@@ -10,7 +10,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /c/Users/Pichau/Desktop/db:/var/lib/mysql
+      - caminho para seu volume
   
   flask:
     container_name: flask-web
