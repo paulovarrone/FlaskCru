@@ -26,5 +26,17 @@ services:
     entrypoint: ["sh", "-c", "sleep 10 && flask run --host=0.0.0.0"]
     depends_on:
       - mysql
+      
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      PMA_HOST: mysql 
+      PMA_PORT: 3306
+    depends_on:
+      - mysql
 
 
